@@ -9,14 +9,14 @@ vector<Airport*> airport_manifest;
 //list of all existing airlines
 vector<Airline*> airline_manifest;
 
-//week days
+//days of the week
 enum Day {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
 
 //time and day
 struct Date{
   Day day;
   int time;
-  void printDate(){
+  string printDate(){
     string date;
     switch(day){
       case Sunday: date = "Sunday";
