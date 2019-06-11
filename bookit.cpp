@@ -6,15 +6,15 @@ using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-float Airport::Distance(Edge to){
+float Airport::Distance(Flight to){
   float x = (this.location.x - to.connect->location.x); if(x < 0) x *= (-1);
   float y = (this.location.y - to.connect->location.y); if(y < 0) y *= (-1);
   return (sqrt(pow(x,2) + pow(y,2)) * 69);
 }
-void Airport::setTime(Edge& to){
+void Airport::setTime(Flight& to){
   to.time = Distance() / 500;
 }
-void Airport::setPrice(Edge& to){
+void Airport::setPrice(Flight& to){
   float rate = (this.size + to.connect->size)/2;
   to.basePrice = Distance() / (rate * 3);
 }
@@ -31,14 +31,14 @@ bool Airport::setInfo(){
   if(exists(name, airport_manifest)) return false;
   else return true;
 }
-void Airport::addEdge(Airport* to, Date d, string a){
-  Edge edge;
-  edge.connect = to;
-  this->setPrice(edge);
-  this->setTime(edge);
-  edge.date = d;
-  edge.airline = a;
-  this->edges.push_back(edge);
+void Airport::addFlight(Airport* to, Date d, string a){
+  Flight flight;
+  flight.connect = to;
+  this->setPrice(flight);
+  this->setTime(flight);
+  flight.date = d;
+  flight.airline = a;
+  this->flights.push_back(flight);
 }
 
 void addAirport(){
@@ -52,8 +52,8 @@ void removeAirport(string name){
   if(exists(name, airport_manifest)){
     for(auto airline : airline_manifest){
       if(exists(name, airline->connections)){
-        //delete all edges TO airport
-        //delete all edges FROM airport
+        //delete all flights TO airport
+        //delete all flights FROM airport
         //delete airport pointer from all airlines
       }
     }
@@ -126,7 +126,7 @@ string Airline::printRating(){
   return stars;
 }
 void Airline::addFlight(){
-  int from = 0, to = 0, t = 3000; Day day; string _day;
+  int from = 0, to = 0, t = 3000; Day day;
   printAllAirports();
 
   cout << "what airport would you like to add a connection FROM?: ";
@@ -147,7 +147,7 @@ void Airline::addFlight(){
   while(t < 0000 || t > 2359 || t%100 > 59) cin >> t;
   Date d(day, time);
 
-  connections[from-1]->addEdge(connections[to-1], d, this->name);
+  connections[from-1]->addFlight(connections[to-1], d, this->name);
 }
 void Airline::editFlight(string name){
 
@@ -162,8 +162,8 @@ bool Airline::setInfo(){
   if(exists(name, airline_manifest)) return false;
   else return true;
 }
-float Airline::getPrice(Edge edge){
-  return (rating * 10) + edge.basePrice;
+float Airline::getPrice(Flight flight){
+  return (rating * 10) + flight.basePrice;
 }
 
 void addAirline(){

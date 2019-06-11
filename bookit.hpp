@@ -45,8 +45,8 @@ struct Coordinates{
   }
 };
 
-//flight (edge)
-struct Edge{
+//flight (flight)
+struct Flight{
   string airline;
   float time;
   Date date;
@@ -62,15 +62,15 @@ struct Edge{
 
 //airport (vertex)
 struct Airport{
-  vector<Edge> edges;
+  vector<Flight> flights;
   string name;
   int size;
   Coordinates location;
-  float Distance(Edge);
-  void setTime(Edge&);
-  void setPrice(Edge&);
+  float Distance(Flight);
+  void setTime(Flight&);
+  void setPrice(Flight&);
   bool setInfo();
-  void addEdge(Airport*, Date, string);
+  void addFlight(Airport*, Date, string);
 };
 
 //network of airports
@@ -82,11 +82,11 @@ struct Airline{
   void addFlight();
   void editFlight(string);
   bool setInfo();
-  float getPrice(Edge);
+  float getPrice(Flight);
 };
 
 ostream& operator<<(ostream& out, Date& obj){return out << obj.printDate();}
-ostream& operator<<(ostream& out, Edge& obj){return out << obj.printTime();}
+ostream& operator<<(ostream& out, Flight& obj){return out << obj.printTime();}
 ostream& operator<<(ostream& out, Airport& obj){return "(" + x + "," + y + ")";}
 ostream& operator<<(ostream& out, Airline& obj){return out << obj.printRating();}
 void printAllAirports();
