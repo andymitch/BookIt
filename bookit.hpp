@@ -39,8 +39,8 @@ struct Date{
 //location coordinates
 struct Coordinates{
   float x, y;
-  Coordinates(float lat, float long){
-    x = long;
+  Coordinates(float lat, float lon){
+    x = lon;
     y = lat;
   }
 };

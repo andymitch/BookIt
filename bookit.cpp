@@ -82,10 +82,10 @@ void editAirport(string name){
       airport->size = _size;
       break;
     case 3: cout << "What is the new location?\n";
-      int lat = 100, long = 200;
+      int lat = 100, lon = 200;
       while(abs(lat) > 90){cout << "Latitude: "; cin >> lat; cout << endl;}
-      while(abs(long) > 180){cout << "Longitude: "; cin >> long; cout << endl;}
-      Coordinates _loc(lat,long);
+      while(abs(lon) > 180){cout << "longitude: "; cin >> lon; cout << endl;}
+      Coordinates _loc(lat,lon);
       cout << airport->location << " -> " << _loc << endl;
       airport->location = _loc;
       break;
