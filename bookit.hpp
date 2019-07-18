@@ -28,7 +28,7 @@ struct Date{
       case Saturday: date = "Saturday";
     }
     date += " @ ";
-    int m = time%100, h = time/100;
+    int m = time%100, h = (time/100)%12;
     date += h + ':' + m;
     if(time >= 1200) date += " p.m.";
     else date += " a.m.";
