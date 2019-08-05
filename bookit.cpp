@@ -7,19 +7,21 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 float Airport::Distance(Flight to){
-  float x = (this.location.x - to.connect->location.x); if(x < 0) x *= (-1);
-  float y = (this.location.y - to.connect->location.y); if(y < 0) y *= (-1);
+  float x = (this->location.x - to.connect->location.x); if(x < 0) x *= (-1);
+  float y = (this->location.y - to.connect->location.y); if(y < 0) y *= (-1);
   return (sqrt(pow(x,2) + pow(y,2)) * 69);
 }
 void Airport::setTime(Flight& to){
-  to.time = Distance() / 500;
+  to.time = Distance(to) / 500;
 }
 void Airport::setPrice(Flight& to){
-  float rate = (this.size + to.connect->size)/2;
-  to.basePrice = Distance() / (rate * 3);
+  float rate = (this->size + to.connect->size)/2;
+  to.basePrice = Distance(to) / (rate * 3);
 }
 bool Airport::setInfo(){
-  cout << "Name: "; cin.getline(name, 50);
+  cout << "Name: ";
+  cin.ignore();
+  getline(cin, name);
   cout << endl;
   int sz = 0;
   while(sz < 1 || sz > 4){
@@ -42,8 +44,8 @@ void Airport::addFlight(Airport* to, Date d, string a){
 }
 
 void addAirport(){
-  Airport* airport = new Airport;
-  if(!airport.setInfo()){
+  Airport* airport = new Airport();
+  if(!airport->setInfo()){
     cout << "Airport already exists." << endl;
     delete airport;
   }else ::airport_manifest.push_back(airport);
@@ -70,25 +72,25 @@ void editAirport(string name){
   }
   Airport* airport = find(name, airport_manifest);
   switch(choice){
-    case 1: string _name;
+    case 1:{string _name;
       cout << "What is the new name?: "; cin >> _name; cout << endl;
       cout << airport->name << " -> " << _name << endl;
       airport->name = _name;
-      break;
-    case 2: int _size = 0;
+      break;}
+    case 2:{int _size = 0;
       cout << "What is the new size? (1-4): ";
       while(_size < 1 || _size > 4) cin >> _size;
       cout << airport->size << " -> " << _size << endl;
       airport->size = _size;
-      break;
-    case 3: cout << "What is the new location?\n";
+      break;}
+    case 3:{cout << "What is the new location?\n";
       int lat = 100, lon = 200;
       while(abs(lat) > 90){cout << "Latitude: "; cin >> lat; cout << endl;}
       while(abs(lon) > 180){cout << "longitude: "; cin >> lon; cout << endl;}
       Coordinates _loc(lat,lon);
       cout << airport->location << " -> " << _loc << endl;
       airport->location = _loc;
-      break;
+      break;}
   }
 }
 
@@ -126,7 +128,7 @@ string Airline::printRating(){
   return stars;
 }
 void Airline::addFlight(){
-  int from = 0, to = 0, t = 3000; Day day;
+  int from = 0, to = 0, time = 3000; string _day;
   printAllAirports();
 
   cout << "what airport would you like to add a connection FROM?: ";
@@ -138,13 +140,14 @@ void Airline::addFlight(){
   }
 
   cout << "What day of the week? (eg. Wednesday): ";
-  while(!(cin >> day)){
+  while(!(cin >> _day)){
     cin.clear();
     cin.ignore(1000, '\n');
     cout << "\nEnter a valid day of the week: ";
   }
+  Day day = getDay(_day);
   cout << "What time? (0000-2359): ";
-  while(t < 0000 || t > 2359 || t%100 > 59) cin >> t;
+  while(time < 0000 || time > 2359 || time%100 > 59) cin >> time;
   Date d(day, time);
 
   connections[from-1]->addFlight(connections[to-1], d, this->name);
@@ -168,7 +171,7 @@ float Airline::getPrice(Flight flight){
 
 void addAirline(){
   Airline* airline = new Airline;
-  if(!airline.setInfo()){
+  if(!airline->setInfo()){
     cout << "Airline already exists." << endl;
     delete airline;
   }else ::airline_manifest.push_back(airline);
@@ -185,17 +188,17 @@ void editAirline(string name){
   }
   Airline* airline = find(name, airline_manifest);
   switch(choice){
-    case 1: string _name;
+    case 1:{string _name;
       cout << "What is the new name?: "; cin >> _name; cout << endl;
       cout << airline->name << " -> " << _name << endl;
       airline->name = _name;
-      break;
-    case 2: float _rating = 0;
+      break;}
+    case 2:{float _rating = 0;
       cout << "What is the new rating? (1.0-5.0): ";
       while(_rating < 1 || _rating > 5) cin >> _rating;
       cout << airline->rating << " -> " << _rating << endl;
       airline->rating = _rating;
-      break;
+      break;}
   }
 }
 

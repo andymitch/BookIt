@@ -1,21 +1,30 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 
-//list of all existing airports
-vector<Airport*> airport_manifest;
-//list of all existing airlines
-vector<Airline*> airline_manifest;
-
 //days of the week
 enum Day {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
+Day getDay(string day){
+  if(day == "Sunday") return Sunday;
+  if(day == "Monday") return Monday;
+  if(day == "Tuesday") return Tuesday;
+  if(day == "Wednesday") return Wednesday;
+  if(day == "Thursday") return Thursday;
+  if(day == "Friday") return Friday;
+  if(day == "Saturday") return Saturday;
+}
 
 //time and day
 struct Date{
   Day day;
   int time;
+  Date(Day d, int t){
+    day = d;
+    time = t;
+  }
   string printDate(){
     string date;
     switch(day){
@@ -39,6 +48,9 @@ struct Date{
 //location coordinates
 struct Coordinates{
   float x, y;
+  Coordinates(){
+    x = y = 0;
+  }
   Coordinates(float lat, float lon){
     x = lon;
     y = lat;
@@ -47,6 +59,7 @@ struct Coordinates{
 
 //flight (flight)
 struct Flight{
+  Flight();
   string airline;
   float time;
   Date date;
@@ -56,12 +69,13 @@ struct Flight{
     float frac, whole; frac = modf(time, &whole);
     int minutes, hours = whole;
     minutes = frac * 60;
-    return "Hours: " + hours + " Minutes: " + minutes;
+    return "Hours: " + to_string(hours) + " Minutes: " + to_string(minutes);
   }
 };
 
 //airport (vertex)
 struct Airport{
+  Airport();
   vector<Flight> flights;
   string name;
   int size;
@@ -85,9 +99,14 @@ struct Airline{
   float getPrice(Flight);
 };
 
+//list of all existing airports
+vector<Airport*> airport_manifest;
+//list of all existing airlines
+vector<Airline*> airline_manifest;
+
 ostream& operator<<(ostream& out, Date& obj){return out << obj.printDate();}
 ostream& operator<<(ostream& out, Flight& obj){return out << obj.printTime();}
-ostream& operator<<(ostream& out, Airport& obj){return "(" + x + "," + y + ")";}
+ostream& operator<<(ostream& out, Coordinates& obj){return out << "[" + to_string(obj.x) + "," + to_string(obj.y) + "]";}
 ostream& operator<<(ostream& out, Airline& obj){return out << obj.printRating();}
 void printAllAirports();
 void printAllAirlines();
