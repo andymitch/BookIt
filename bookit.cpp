@@ -6,15 +6,15 @@ using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-float Airport::Distance(Flight to){
+float Airline::Distance(Flight to){
   float x = (this->location.x - to.connect->location.x); if(x < 0) x *= (-1);
   float y = (this->location.y - to.connect->location.y); if(y < 0) y *= (-1);
   return (sqrt(pow(x,2) + pow(y,2)) * 69);
 }
-void Airport::setTime(Flight& to){
+void Airline::setTime(Flight& to){
   to.time = Distance(to) / 500;
 }
-void Airport::setPrice(Flight& to){
+void Airline::setPrice(Flight& to){
   float rate = (this->size + to.connect->size)/2;
   to.basePrice = Distance(to) / (rate * 3);
 }
@@ -33,7 +33,7 @@ bool Airport::setInfo(){
   if(exists(name, airport_manifest)) return false;
   else return true;
 }
-void Airport::addFlight(Airport* to, Date d, string a){
+void Airline::addFlight(Airport* to, Date d, string a){
   Flight flight;
   flight.connect = to;
   this->setPrice(flight);
@@ -59,8 +59,9 @@ void removeAirport(string name){
         //delete airport pointer from all airlines
       }
     }
-    //delete airport
+    //temp ptr to airport
     //delete airport pointer from manifest
+    //delete airport
   }else cout << "Airport does not exist." << endl;
 }
 void editAirport(string name){
@@ -152,8 +153,16 @@ void Airline::addFlight(){
 
   connections[from-1]->addFlight(connections[to-1], d, this->name);
 }
-void Airline::editFlight(string name){
-
+void Airline::editFlightTime(string name){
+  //editTime
+  Flight* flight = getFlight(name);
+  int t = -1;
+  cout << "Current flight time: " << flight->date.time << endl;
+  while(!isdigit(t) || t < 0000 || t > 2359){
+    cout << "What is the new time?: (0000-2359)";
+    cin >> t;
+  }
+  flight->date.time = t;
 }
 bool Airline::setInfo(){
   cout << "Name: "; cin >> name; cout << endl;

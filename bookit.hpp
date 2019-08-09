@@ -57,14 +57,15 @@ struct Coordinates{
   }
 };
 
-//flight (flight)
+//flight (edge)
 struct Flight{
-  Flight();
+  string number;
   string airline;
   float time;
   Date date;
   float basePrice;
   Airport* connect;
+  Flight();
   string printTime(){
     float frac, whole; frac = modf(time, &whole);
     int minutes, hours = whole;
@@ -76,27 +77,26 @@ struct Flight{
 //airport (vertex)
 struct Airport{
   Airport();
-  vector<Flight> flights;
   string name;
   int size;
   Coordinates location;
-  float Distance(Flight);
-  void setTime(Flight&);
-  void setPrice(Flight&);
   bool setInfo();
-  void addFlight(Airport*, Date, string);
 };
 
 //network of airports
 struct Airline{
   string name;
   float rating;
-  vector<Airport*> connections;
+  vector<Flight> flights; // CHANGE TO A HASH TABLE
   string printRating();
   void addFlight();
-  void editFlight(string);
+  void editFlightTime(string);
   bool setInfo();
   float getPrice(Flight);
+  float Distance(Flight);
+  void setTime(Flight&);
+  void setPrice(Flight&);
+  void addFlight(Airport*, Date, string);
 };
 
 //list of all existing airports
@@ -104,10 +104,13 @@ vector<Airport*> airport_manifest;
 //list of all existing airlines
 vector<Airline*> airline_manifest;
 
+//ostream overloads
 ostream& operator<<(ostream& out, Date& obj){return out << obj.printDate();}
 ostream& operator<<(ostream& out, Flight& obj){return out << obj.printTime();}
 ostream& operator<<(ostream& out, Coordinates& obj){return out << "[" + to_string(obj.x) + "," + to_string(obj.y) + "]";}
 ostream& operator<<(ostream& out, Airline& obj){return out << obj.printRating();}
+
+//helper functions
 void printAllAirports();
 void printAllAirlines();
 void addAirport();
